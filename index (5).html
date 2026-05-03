@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Kendi Finansal Senaryonu Gör</title>
+<style>
+:root{
+  --bg:#060b12;
+  --card:#0d1726;
+  --card2:#121f33;
+  --gold:#c8a96a;
+  --gold2:#f5d98f;
+  --cream:#f8f4ec;
+  --muted:#aeb7c5;
+  --line:rgba(200,169,106,.30);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--cream)}
+body{
+  background:
+    radial-gradient(circle at 58% 0%,rgba(245,217,143,.25),transparent 26%),
+    radial-gradient(circle at 12% 90%,rgba(200,169,106,.16),transparent 28%),
+    linear-gradient(135deg,#03060a 0%,#07111f 54%,#121a2a 100%);
+}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.app{
+  width:min(440px,100%);
+  min-height:720px;
+  border-radius:34px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(4,7,11,.98));
+  box-shadow:0 30px 90px rgba(0,0,0,.56),inset 0 0 0 1px rgba(255,255,255,.035);
+}
+.top{padding:24px 24px 16px;text-align:center;background:linear-gradient(180deg,rgba(200,169,106,.12),transparent)}
+.brand{font-family:Georgia,serif;font-size:26px;color:#fff}.brand span{color:var(--gold2)}
+.subbrand{font-size:11px;letter-spacing:.18em;color:var(--gold2);margin-top:3px}
+.progress{height:4px;background:rgba(255,255,255,.08);margin:18px 0 0;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+.stage{display:none;padding:22px 24px 30px;min-height:540px}
+.stage.active{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.orb{
+  width:112px;height:112px;border-radius:50%;margin:18px auto 25px;position:relative;
+  background:radial-gradient(circle at 35% 24%,#fff8d6,var(--gold2) 20%,#c8a96a 43%,#4b3410 76%);
+  box-shadow:0 0 42px rgba(245,217,143,.56),0 0 0 12px rgba(200,169,106,.08);
+}
+.orb:before{content:"";position:absolute;inset:-18px;border:1px solid rgba(245,217,143,.56);border-radius:50%}
+.orb:after{content:"";position:absolute;left:-30px;right:-30px;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.kicker{color:var(--gold2);font-size:12px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:12px}
+h1,h2{font-family:Georgia,serif;margin:0;color:#fff;line-height:1.06}
+h1{font-size:34px}h2{font-size:29px}.gold{color:var(--gold2)}
+p{color:var(--muted);line-height:1.55;margin:14px 0 0;font-size:15px}.lead{font-size:17px;color:#d6dde8}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:22px 0}
+.chip{border:1px solid var(--line);border-radius:99px;padding:8px 10px;font-size:12px;color:var(--gold2);background:rgba(255,255,255,.03)}
+.box{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:22px;padding:18px;margin:18px 0}
+.statement{font-family:Georgia,serif;font-size:25px;color:var(--gold2);line-height:1.15;text-align:center;margin:18px 0}
+.option{
+  display:block;width:100%;margin:10px 0;padding:15px 16px;border-radius:16px;
+  border:1px solid rgba(200,169,106,.28);background:rgba(255,255,255,.04);color:#fff;
+  text-align:left;font-size:16px;cursor:pointer;
+}
+.option.selected,.option:hover{border-color:var(--gold2);background:rgba(200,169,106,.15)}
+.field{margin:12px 0}label{display:block;color:var(--gold2);font-size:13px;margin-bottom:7px}
+input,select{
+  width:100%;padding:15px;border-radius:15px;border:1px solid rgba(200,169,106,.3);
+  background:rgba(255,255,255,.06);color:#fff;font-size:16px;outline:none;
+}
+select option{color:#111}
+.btns{margin-top:22px;display:flex;gap:10px}
+button.btn,a.btn{
+  display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+  width:100%;padding:16px 18px;border:0;border-radius:18px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#111827;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(200,169,106,.22);
+}
+button.back{background:transparent;color:var(--gold2);border:1px solid var(--line);box-shadow:none;width:38%}
+.small{font-size:12px;color:#9aa5b5}
+.err{display:none;color:#ffcf7a;font-size:13px;margin-top:10px}
+.metric{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.mini{border:1px solid var(--line);border-radius:15px;padding:12px;text-align:center;background:rgba(255,255,255,.035)}
+.mini b{display:block;color:var(--gold2);font-size:21px;font-family:Georgia,serif}.mini span{font-size:11px;color:var(--muted)}
+.finalcard{background:linear-gradient(180deg,rgba(200,169,106,.14),rgba(255,255,255,.035))}
+.footer{padding:0 24px 24px;text-align:center;color:#8e9aae;font-size:12px}
+.copybox{width:100%;height:140px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;padding:12px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<main class="app">
+<header class="top">
+  <div class="brand">Vienna<span>Life</span></div>
+  <div class="subbrand">DOKTORLARA ÖZEL FİNANSAL PLANLAMA</div>
+  <div class="progress"><i id="bar"></i></div>
+</header>
+
+<section class="stage active" id="stage0">
+  <div class="orb"></div>
+  <div class="kicker">Kendi senaryonu gör</div>
+  <h1>30 saniyede <span class="gold">finansal senaryonu</span> keşfet</h1>
+  <p class="lead">Zaten çıkacak olan bir para, doğru yönlendirilirse geleceğine çalışan bir sisteme dönüşebilir.</p>
+  <div class="chips"><span class="chip">Kişiye özel</span><span class="chip">Gizli</span><span class="chip">30 saniye</span></div>
+  <div class="btns"><button class="btn" id="startBtn" type="button">Başla</button></div>
+</section>
+
+<section class="stage" id="stage1">
+  <div class="kicker">1 / 8</div>
+  <h2>Ya gider…<br><span class="gold">ya senin olur.</span></h2>
+  <div class="box">
+    <p>Her ay gelirinin bir kısmı fark etmeden sistemden çıkar. Vergi olarak gider; geri gelmez.</p>
+    <div class="statement">Biriktireceğini sandığın para zaten senin değil.</div>
+    <p>Kontrol etmezsen kaybolur, yönlendirirsen geleceğe dönüşür.</p>
+  </div>
+  <div class="btns"><button class="btn back" type="button" data-go="0">Geri</button><button class="btn" type="button" data-go="2">Devam et</button></div>
+</section>
+
+<section class="stage" id="stage2">
+  <div class="kicker">2 / 8</div>
+  <h2>Gelirinin ne kadarı sence <span class="gold">birikime dönüşüyor?</span></h2>
+  <button class="option" type="button" data-field="saving" data-value="%0–10">%0–10</button>
+  <button class="option" type="button" data-field="saving" data-value="%10–30">%10–30</button>
+  <button class="option" type="button" data-field="saving" data-value="%30+">%30+</button>
+  <button class="option" type="button" data-field="saving" data-value="Bilmiyorum">Bilmiyorum</button>
+  <p class="small">Bu soru doğru ya da yanlış cevap için değil; mevcut sistemi nasıl gördüğünü anlamak için.</p>
+  <div class="err" id="err2">Devam etmek için bir seçenek işaretle.</div>
+  <div class="btns"><button class="btn back" type="button" data-go="1">Geri</button><button class="btn" type="button" data-require="saving" data-go="3">Devam et</button></div>
+</section>
+
+<section class="stage" id="stage3">
+  <div class="kicker">3 / 8</div>
+  <h2>Vergi kesintilerinin ne kadarını <span class="gold">kontrol edebildiğini</span> düşünüyorsun?</h2>
+  <button class="option" type="button" data-field="tax" data-value="Hiç">Hiç</button>
+  <button class="option" type="button" data-field="tax" data-value="Kısmen">Kısmen</button>
+  <button class="option" type="button" data-field="tax" data-value="Tamamen">Tamamen</button>
+  <button class="option" type="button" data-field="tax" data-value="Emin değilim">Emin değilim</button>
+  <p class="small">Çoğu kişi burada fark oluştuğunu ilk kez bordro üzerinden görüyor.</p>
+  <div class="err" id="err3">Devam etmek için bir seçenek işaretle.</div>
+  <div class="btns"><button class="btn back" type="button" data-go="2">Geri</button><button class="btn" type="button" data-require="tax" data-go="4">Devam et</button></div>
+</section>
+
+<section class="stage" id="stage4">
+  <div class="kicker">4 / 8</div>
+  <h2>Sistem nasıl <span class="gold">çalışır?</span></h2>
+  <div class="box">
+    <p>Aylık 850 $ plan yaptığında, bunun yaklaşık 340 $’ı zaten devlete ödeyeceğin vergi yükünden doğan avantajdır.</p>
+    <div class="metric">
+      <div class="mini"><b>340 $</b><span>zaten gidecek vergi</span></div>
+      <div class="mini"><b>+170 $</b><span>ek gerçek fark</span></div>
+      <div class="mini"><b>850 $</b><span>birikim gücü</span></div>
+    </div>
+    <p>Yani 510 $ maliyetle, 850 $’lık birikim potansiyeline ulaşırsın.</p>
+  </div>
+  <div class="btns"><button class="btn back" type="button" data-go="3">Geri</button><button class="btn" type="button" data-go="5">Devam et</button></div>
+</section>
+
+<section class="stage" id="stage5">
+  <div class="kicker">5 / 8</div>
+  <h2>Sadece birikim değil,<br><span class="gold">güvence de var.</span></h2>
+  <div class="box">
+    <p>Bu yapı; dolar bazlı birikim, vade sonu ödül seçenekleri ve hayat sigortası korumasını aynı çatı altında düşünebilmeni sağlar.</p>
+    <p>Maluliyet teminatlı seçeneklerle beklenmedik durumlarda yaşam standardını ve ailenin finansal güvenliğini koruma hedeflenir.</p>
+  </div>
+  <div class="btns"><button class="btn back" type="button" data-go="4">Geri</button><button class="btn" type="button" data-go="6">Devam et</button></div>
+</section>
+
+<section class="stage" id="stage6">
+  <div class="kicker">6 / 8</div>
+  <h2>Senin için mini senaryo hazırlayalım.</h2>
+  <p>Sonucu görebilmen için birkaç kısa bilgi gerekiyor.</p>
+  <div class="field"><label>Ad Soyad</label><input id="name" autocomplete="name" placeholder="Adınız Soyadınız"></div>
+  <div class="field"><label>Telefon</label><input id="phone" inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx"></div>
+  <div class="field"><label>Branş</label><input id="branch" placeholder="Aile hekimi / uzman hekim..."></div>
+  <div class="field"><label>Aylık brüt gelir aralığı</label>
+    <select id="income">
+      <option value="">Seçiniz</option>
+      <option>150.000 – 250.000 TL</option>
+      <option>250.000 – 400.000 TL</option>
+      <option>400.000 TL+</option>
+    </select>
+  </div>
+  <p class="small">Bilgilerin yalnızca sana özel finansal senaryo için kullanılır.</p>
+  <div class="err" id="err6">Lütfen tüm alanları doldur.</div>
+  <div class="btns"><button class="btn back" type="button" data-go="5">Geri</button><button class="btn" id="submitBtn" type="button">Senaryomu Gör</button></div>
+</section>
+
+<section class="stage" id="stage7">
+  <div class="kicker">7 / 8</div>
+  <h2>Senaryon hazır.</h2>
+  <div class="box finalcard">
+    <p>Normalde fark etmeden sistemden çıkan bir tutar, doğru yönlendirilirse birikime ve güvenceye dönüşebilir.</p>
+    <div class="statement">Ya gider…<br>ya senin olur.</div>
+    <p>Detayı görmek için standa uğra. 2 dakikada bordron üzerinden netleştirelim.</p>
+  </div>
+  <textarea class="copybox" id="leadText" readonly></textarea>
+  <div class="btns"><button class="btn" id="whatsappBtn" type="button">Bilgilerimi WhatsApp ile gönder</button></div>
+  <p class="small">WhatsApp açılmazsa yukarıdaki metni kopyalayıp Şeyma Demir’e gönderebilirsin.</p>
+</section>
+
+<section class="stage" id="stage8">
+  <div class="orb"></div>
+  <div class="kicker">Teşekkürler</div>
+  <h2>Geleceğini planla,<br><span class="gold">kazanmaya bugün başla.</span></h2>
+  <p>Şeyma Demir ile standa uğrayarak kendi bordron üzerinden net analizi alabilirsin.</p>
+  <div class="box"><p><b>Finansal Planlama uzm. Şeyma Demir</b><br>0 507 104 59 56</p></div>
+  <div class="btns"><button class="btn" type="button" data-go="0">Baştan başla</button></div>
+</section>
+
+<div class="footer">Finansal Planlama Uzm. Şeyma Demir • 0 507 104 59 56</div>
+</main>
+</div>
+
+<script>
+(function(){
+  var lead = {};
+  var total = 8;
+  var current = 0;
+
+  function qs(sel){ return document.querySelector(sel); }
+  function qsa(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  window.showStage = function(n){
+    qsa('.stage').forEach(function(el){ el.classList.remove('active'); });
+    var target = qs('#stage' + n);
+    if(target){
+      target.classList.add('active');
+      current = n;
+      var bar = qs('#bar');
+      if(bar){ bar.style.width = Math.min(100, (n / total) * 100) + '%'; }
+      window.scrollTo(0,0);
+    }
+  };
+
+  function makeMessage(){
+    return "Yeni finansal senaryo talebi:\n\n" +
+      "Ad Soyad: " + (lead.name || "") + "\n" +
+      "Telefon: " + (lead.phone || "") + "\n" +
+      "Branş: " + (lead.branch || "") + "\n" +
+      "Gelir Aralığı: " + (lead.income || "") + "\n" +
+      "Birikime dönüşüm cevabı: " + (lead.saving || "") + "\n" +
+      "Vergi kontrol cevabı: " + (lead.tax || "");
+  }
+
+  function updateLeadText(){
+    var area = qs('#leadText');
+    if(area){ area.value = makeMessage(); }
+  }
+
+  function init(){
+    var start = qs('#startBtn');
+    if(start){ start.addEventListener('click', function(){ showStage(1); }); }
+
+    qsa('[data-go]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var req = btn.getAttribute('data-require');
+        if(req && !lead[req]){
+          var err = qs('#err' + current);
+          if(err){ err.style.display = 'block'; }
+          return;
+        }
+        showStage(parseInt(btn.getAttribute('data-go'), 10));
+      });
+    });
+
+    qsa('.option').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var field = btn.getAttribute('data-field');
+        var value = btn.getAttribute('data-value');
+        lead[field] = value;
+        qsa('.option[data-field="' + field + '"]').forEach(function(o){ o.classList.remove('selected'); });
+        btn.classList.add('selected');
+        var err = qs('#err' + current);
+        if(err){ err.style.display = 'none'; }
+      });
+    });
+
+    var submit = qs('#submitBtn');
+    if(submit){
+      submit.addEventListener('click', function(){
+        var name = qs('#name').value.trim();
+        var phone = qs('#phone').value.trim();
+        var branch = qs('#branch').value.trim();
+        var income = qs('#income').value;
+        if(!name || !phone || !branch || !income){
+          qs('#err6').style.display = 'block';
+          return;
+        }
+        lead.name = name;
+        lead.phone = phone;
+        lead.branch = branch;
+        lead.income = income;
+        qs('#err6').style.display = 'none';
+        updateLeadText();
+        showStage(7);
+      });
+    }
+
+    var wa = qs('#whatsappBtn');
+    if(wa){
+      wa.addEventListener('click', function(){
+        var url = "https://wa.me/905071045956?text=" + encodeURIComponent(makeMessage());
+        window.location.href = url;
+        setTimeout(function(){ showStage(8); }, 500);
+      });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
